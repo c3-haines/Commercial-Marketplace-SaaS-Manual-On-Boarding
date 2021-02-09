@@ -1,4 +1,4 @@
 git remote add marketplaceclient https://github.com/microsoft/commercial-marketplace-client-dotnet.git
 git fetch marketplaceclient
 git merge -s ours --no-commit  --allow-unrelated-histories marketplaceclient/dev
-git read-tree --prefix=api/Microsoft.Marketplace -u marketplaceclient/dev:src
+git read-tree --prefix=src/Microsoft.Marketplace -u marketplaceclient/dev:src
