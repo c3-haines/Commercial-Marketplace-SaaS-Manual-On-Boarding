@@ -56,6 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\commercial-marketplace-sdk-dotnet\sdk\src\Microsoft.Marketplace.csproj" />
+    <ProjectReference Include="..\Microsoft.Marketplace\Microsoft.Marketplace.csproj" />
   </ItemGroup>
 </Project>
