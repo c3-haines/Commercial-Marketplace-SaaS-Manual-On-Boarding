@@ -91,7 +91,7 @@ namespace CommandCenter.Controllers
                 null,
                 cancellationToken).ConfigureAwait(false);
 
-            var pendingOperations = await this.marketplaceClient.SubscriptionOperations.ListOperationsAsync(
+            var pendingOperations = await this.marketplaceClient.Operations.ListOperationsAsync(
                 resolvedSubscription.Id.Value,
                 null,
                 null,

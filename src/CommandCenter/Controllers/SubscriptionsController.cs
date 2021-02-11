@@ -88,7 +88,7 @@ namespace CommandCenter.Controllers
         /// <returns>Action result.</returns>
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var subscriptions = await this.marketplaceClient.Fulfillment.ListSubscriptionsAsync().ToListAsync();
+            var subscriptions = await marketplaceClient.Fulfillment.ListSubscriptionsAsync(cancellationToken: cancellationToken).ToListAsync();
 
             var subscriptionsViewModel = subscriptions.Select(SubscriptionViewModel.FromSubscription)
                 .Where(s => s.State != SubscriptionStatusEnum.Unsubscribed || this.options.ShowUnsubscribed);
@@ -141,7 +141,7 @@ namespace CommandCenter.Controllers
             foreach (var operation in subscriptionOperations)
             {
                 operations.Add(
-                    await this.marketplaceClient.SubscriptionOperations.GetOperationStatusAsync(
+                    await this.marketplaceClient.Operations.GetOperationStatusAsync(
                         subscriptionId,
                         operation.OperationId,
                         null,
@@ -271,7 +271,7 @@ namespace CommandCenter.Controllers
                         null,
                         cancellationToken).ConfigureAwait(false)).Value;
 
-                    var pendingOperations = (await this.marketplaceClient.SubscriptionOperations.ListOperationsAsync(
+                    var pendingOperations = (await this.marketplaceClient.Operations.ListOperationsAsync(
                         subscriptionId,
                         null,
                         null,
@@ -324,26 +324,25 @@ namespace CommandCenter.Controllers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            var pendingOperations = await this.marketplaceClient.SubscriptionOperations.ListOperationsAsync(
+            var pendingOperations = await this.marketplaceClient.Operations.ListOperationsAsync(
                 model.SubscriptionId,
                 null,
                 null,
                 cancellationToken).ConfigureAwait(false);
 
-            if (pendingOperations.Operations.Any(o => o.Status == OperationStatusEnum.InProgress))
+            if (pendingOperations.Value.Operations.Any(o => o.Status == OperationStatusEnum.InProgress))
             {
                 return this.RedirectToAction("Index");
             }
 
             var updateResult = await this.marketplaceClient.Fulfillment.UpdateSubscriptionAsync(
                 model.SubscriptionId,
+                new SubscriberPlan { PlanId = model.NewPlan },
                 null,
-                null,
-                model.NewPlan,
                 null,
                 cancellationToken).ConfigureAwait(false);
 
-            await this.operationsStore.RecordAsync(model.SubscriptionId, updateResult.OperationId, cancellationToken).ConfigureAwait(false);
+            await this.operationsStore.RecordAsync(model.SubscriptionId, Guid.Parse(updateResult), cancellationToken).ConfigureAwait(false);
 
             return this.RedirectToAction("Index");
         }
