@@ -13,7 +13,8 @@
 <hr />
 
 <span class="text-danger">@Html.ValidationSummary(false)</span>
-
+@if (Model != null)
+{
 <form asp-controller="LandingPage" asp-action="Index">
     <div class="container">
         <dl class="row">
@@ -160,3 +161,4 @@
                class="btn btn-primary" />
     </div>
 </form>
+}
