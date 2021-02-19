@@ -3,6 +3,7 @@
 
 namespace CommandCenter.Mail
 {
+    using System.Collections.Generic;
     /// <summary>
     /// Email related options.
     /// </summary>
@@ -11,7 +12,7 @@ namespace CommandCenter.Mail
         /// <summary>
         ///  Gets or sets operations team email.
         /// </summary>
-        public string OperationsTeamEmail { get; set; }
+        public List<string> OperationsTeamEmail { get; set; }
 
         /// <summary>
         /// Gets or sets SendGrid API key.

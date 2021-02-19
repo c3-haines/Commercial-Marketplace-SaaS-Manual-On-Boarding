@@ -256,7 +256,21 @@ namespace CommandCenter.Controllers
             switch (subscriptionAction)
             {
                 case ActionsEnum.Activate:
-                    break;
+                    var sub = await this.marketplaceClient.FulfillmentOperations.GetSubscriptionAsync(
+                        subscriptionId,
+                        null,
+                        null,
+                        cancellationToken).ConfigureAwait(false);
+
+                    await this.marketplaceClient.FulfillmentOperations.ActivateSubscriptionAsync(
+                        subscriptionId,
+                        null,
+                        null,
+                        sub.PlanId,
+                        null,
+                        cancellationToken).ConfigureAwait(false);
+                    
+                    return this.RedirectToAction("Index");
 
                 case ActionsEnum.Update:
                     var availablePlans = await this.marketplaceClient.FulfillmentOperations.ListAvailablePlansAsync(

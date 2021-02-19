@@ -264,9 +264,13 @@ namespace CommandCenter.Mail
         {
             var msg = new SendGridMessage();
 
-            msg.SetFrom(new EmailAddress(this.options.Mail.FromEmail, "Marketplace command center"));
+            msg.SetFrom(new EmailAddress(this.options.Mail.FromEmail, "Azure Marketplace Fulfillment"));
 
-            var recipients = new List<EmailAddress> { new EmailAddress(this.options.Mail.OperationsTeamEmail) };
+            var recipients = new List<EmailAddress>();
+            foreach (var recip in this.options.Mail.OperationsTeamEmail)
+            {
+                recipients.Add(new EmailAddress(recip));
+            }
 
             msg.AddTos(recipients);
 
